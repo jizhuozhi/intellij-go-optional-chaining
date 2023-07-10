@@ -1,0 +1,77 @@
+<!-- Plugin Configuration File. Read more: https://plugins.jetbrains.com/docs/intellij/plugin-configuration-file.html -->
+<idea-plugin>
+    <!-- Unique identifier of the plugin. It should be FQN. It cannot be changed between the plugin versions. -->
+    <id>cn.elasticj.optionalchaining</id>
+
+    <!-- Public plugin name should be written in Title Case.
+         Guidelines: https://plugins.jetbrains.com/docs/marketplace/plugin-overview-page.html#plugin-name -->
+    <name>Optional Chaining</name>
+
+    <!-- A displayed Vendor name or Organization ID displayed on the Plugins Page. -->
+    <vendor email="jizhuozhi.george@gmail.com" url="https://github.com/jizhuozhi">Zhuozhi Ji</vendor>
+
+    <!-- Description of the plugin displayed on the Plugin Page and IDE Plugin Manager.
+         Simple HTML elements (text formatting, paragraphs, and lists) can be added inside of <![CDATA[ ]]> tag.
+         Guidelines: https://plugins.jetbrains.com/docs/marketplace/plugin-overview-page.html#plugin-description -->
+    <description><![CDATA[
+    <h1>Go Optional Chaining</h1>
+<h2>Basic</h2>
+Optional Chaining (Safe navigation) can be achieved by writing expressions in annotations.
+<p>
+A simple example:
+<pre><code>	f := func(a *A) (*Value, error) {
+		//optional a?.b()!.C()?!.D.Value()
+	}</code></pre>
+<p>
+Through this plugin (select the comment, right click, and then click <code>Optional Chaining</code>, you can also customize the shortcut key) the following code will be generated
+<pre><code>	f := func(a *A) (*Value, error) {
+		//optional a?.b()!.C()?!.D.Value()
+		_0 := a
+		if _0 == nil {
+			return nil, nil
+		}
+		_1, err := _0.b()
+		if err != nil {
+			return nil, err
+		}
+		_2, err := _1.C()
+		if err != nil || _2 == nil {
+			return nil, err
+		}
+		return _2.D.Value(), nil
+	}</code></pre>
+<p>
+You can see that expressions support four methods of getting values or executing functions
+<ol>
+<li><b><code>.</code></b>: Use the same method of getting a value or executing a function as Go, and the statement will be translated in the original way</li>
+<li><b><code>?.</code></b>: Optional, if the value is <code>nil</code>, the function will end here and return the zero value of the corresponding type (if it is a numeric type, it is <code>0</code>, the pointer is <code>nil</code>, if it is a structure, it is <code>T{}</code>, and the zero value of other types defined in Go)</li>
+<li><b><code>!.</code></b>: Error-able, valid only for function calls, and requires the return value of the outer function to return two results, and the second result must be of type error. If the function call returns <code>err</code> is not <code>nil</code>, the function will end here and return an error</li>
+<li><b><code>?!.</code></b>: Optional and error-prone, the function is the combination of <code>?.</code> and <code>!.</code></li>
+</ol>
+
+All statements except these four operators will be replaced with the original statement. (The plugin supports two types of function signatures <code>fun (...) T</code> and <code>fun (...) (T, error)</code>, the first type of function does not support < code>!.</code>)
+<p>
+<h2>Comment format</h2>
+In order to avoid wrong parsing, the plugin requires that comments must be on a single line and written in the following format
+<code>//optional ${your expression}</code> (replace <code>${your expression}</code> with your expression)
+  ]]></description>
+
+    <!-- Product and plugin compatibility requirements.
+         Read more: https://plugins.jetbrains.com/docs/intellij/plugin-compatibility.html -->
+    <depends>com.intellij.modules.platform</depends>
+    <depends>org.jetbrains.plugins.go</depends>
+
+    <!-- Extension points defined by the plugin.
+         Read more: https://plugins.jetbrains.com/docs/intellij/plugin-extension-points.html -->
+    <extensions defaultExtensionNs="com.intellij">
+
+    </extensions>
+
+    <actions>
+        <action id="cn.elasticj.optionalchaining.OptionalChainingAction"
+                class="cn.elasticj.optionalchaining.OptionalChainingAction" text="Optional Chaining"
+                description="Optional chaining">
+            <add-to-group group-id="EditorPopupMenu" anchor="last"/>
+        </action>
+    </actions>
+</idea-plugin>
