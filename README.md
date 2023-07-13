@@ -1,5 +1,7 @@
 # Optional Chaining
 
+Plugin is avaliable on [JetBrains Marketplace](https://plugins.jetbrains.com/plugin/22229-optional-chaining)
+
 ## Basic
 
 Optional Chaining (Safe navigation) can be achieved by writing expressions in annotations.
