@@ -23,6 +23,11 @@ class GoHelper {
             return psiFile?.findElementAt(caretModel.offset)
         }
 
+        private fun getCaretMethodDeclaration(editor: Editor): GoMethodDeclaration? {
+            val psiElement = getCaretPsiElement(editor)
+            return psiElement?.parentOfType<GoMethodDeclaration>()
+        }
+
         private fun getCaretFunctionDeclaration(editor: Editor): GoFunctionDeclaration? {
             val psiElement = getCaretPsiElement(editor)
             return psiElement?.parentOfType<GoFunctionDeclaration>()
@@ -40,7 +45,16 @@ class GoHelper {
             }
 
             val functionDeclaration = getCaretFunctionDeclaration(editor)
-            return functionDeclaration?.signature?.result
+            if (functionDeclaration != null) {
+                return functionDeclaration.signature?.result
+            }
+
+            val methodDeclaration = getCaretMethodDeclaration(editor)
+            if (methodDeclaration != null) {
+                return methodDeclaration.result
+            }
+
+            return null
         }
 
         fun getCaretFunctionResultTypes(editor: Editor): List<GoType?> {
