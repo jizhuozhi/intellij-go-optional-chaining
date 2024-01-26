@@ -65,6 +65,6 @@ class OptionalChainingAction : AnAction() {
     }
 
     companion object {
-        val pattern = Pattern.compile("//optional (.*)")!!
+        val pattern = Pattern.compile("// ?optional (.*)")!!
     }
 }
