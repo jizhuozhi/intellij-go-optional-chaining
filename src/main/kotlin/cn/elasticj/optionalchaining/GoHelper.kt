@@ -69,7 +69,7 @@ class GoHelper {
         }
 
         fun defaultValue(goType: GoType): String {
-            when (goType.getUnderlyingType(ResolveState.initial())) {
+            when (val underlyingType = goType.getUnderlyingType(ResolveState.initial())) {
                 is GoPointerType, is GoInterfaceType, is GoArrayOrSliceType, is GoMapType -> {
                     return "nil"
                 }
@@ -79,7 +79,7 @@ class GoHelper {
                     return "${structName}{}"
                 }
 
-                else -> return when (goType.presentationText) {
+                else -> return when (underlyingType.presentationText) {
                     "bool" -> "false"
                     "string" -> "\"\""
                     "int", "int8", "int16", "int32", "int64" -> "0"

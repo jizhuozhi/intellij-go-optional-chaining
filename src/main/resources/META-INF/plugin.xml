@@ -16,6 +16,10 @@
     <description><![CDATA[
     <h1>Go Optional Chaining</h1>
     <h2>Release Note</h2>
+    <h3>1.0.3</h3>
+    <ul>
+    <li>Fix type alias of primitive types throws "Unsupported GoType"</li>
+    </ul>
     <h3>1.0.2</h3>
     <ul>
     <li>Supports leading space in comments</li>
